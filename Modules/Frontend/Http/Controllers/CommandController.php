@@ -230,13 +230,13 @@ class CommandController extends Controller
     //show_facteur
     public function show_facteur($id)
     {
-        $facture=Facture::where('command_id','=',$id)->first();
+        $facture=Facture::where('id','=',$id)->first();
         if($facture!=null){
-            if(Auth::id()!=$facture->command->user_id){
+            if(  Auth::id() != $facture->command->user->id ){
                 abort(403);
             }else{
                 foreach( $facture->command->products as $product ){
-                    $command_products[]=CommandProduct::where('product_id','=',$product->id)->where('command_id','=',$id)->first();
+                    $command_products[]=CommandProduct::where('product_id','=',$product->id)->where('command_id','=',$facture->command_id)->first();
                 }
                 $data=[
                     'facture'=>$facture,
